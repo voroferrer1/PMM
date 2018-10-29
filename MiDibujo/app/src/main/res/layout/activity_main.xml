@@ -5,8 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <View
-        class="com.example.vorper.midibujo.MainActivity.EjemploView"
+    <view
+        class="com.example.vorper.midibujo.EjemploView"
+        android:id="@+id/miCanvas"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

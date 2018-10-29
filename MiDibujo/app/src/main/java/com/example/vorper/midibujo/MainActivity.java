@@ -15,13 +15,15 @@ import android.view.View;
 
 public class MainActivity extends Activity {
 
+    View vista;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       // setContentView(new EjemploView(this));
+        //setContentView(new EjemploView(this));
+        vista = (View) findViewById(R.id.miCanvas);
         setContentView(R.layout.activity_main);
     }
-
+/*
     public class EjemploView extends View {
         public EjemploView(Context contexto) {
             super(contexto);
@@ -79,14 +81,19 @@ public class MainActivity extends Activity {
             String mensaje = "Ancho:"+getWidth()+"  Alto:"+getHeight();
             canvas.drawText(mensaje,400,1700, miPincel);
 
-            /* Otra forma de dibujar
+             Otra forma de dibujar
             int x=500;int y=1300;
             int ancho = 300 , alto = 500;
             miDrawable = new ShapeDrawable(new OvalShape());
             miDrawable.getPaint().setColor(0xff0000ff);
             miDrawable.setBounds(x,y,x+ancho,y+alto);
             miDrawable.draw(canvas);
-            */
+
         }
-    }
+
+        public void Redraw(View v){
+            vista.invalidate();
+        }
+        */
 }
+
