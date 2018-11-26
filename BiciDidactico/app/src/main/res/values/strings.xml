@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">BiciDidactico</string>
+    <string name="tituloAplicación">BiciDidactico</string>
+    <string name="Jugar">Jugar</string>
+    <string name="Configurar">Configurar</string>
+    <string name="Acercade">Acerca De</string>
+    <string name="Salir">Salir</string>
+    <string name="TextoAcercaDe">Esta aplicación ha sido desarrollada para el curso de
+        DAM del Serpis sobre programación de dispositivos móviles mediante Android
+    </string>
+</resources>
