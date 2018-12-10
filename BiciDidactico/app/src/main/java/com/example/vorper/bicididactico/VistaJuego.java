@@ -5,7 +5,11 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import android.media.MediaPlayer;
+import android.os.AsyncTask;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 
 public class VistaJuego extends View {
@@ -22,7 +26,23 @@ public class VistaJuego extends View {
     private static final float PASO_ACELERACION_BICI = 0.5f;
 
     //Thread y tiempo
+    private HiloJuego hiloJuego;
+    private static int PERIODO_PROCESO = 50;
+    private long ultimoProceso =0;
 
+    //Pantalla Tactil
+    private float  mX=0, mY=0;
+    private boolean disparo = false;
+
+    //Rueda
+    private Grafico rueda;
+    private static int VELOCIDAD_RUEDA = 12;
+    private boolean ruedaActiva;
+    private int distanciaRueda;
+
+    //Variables Globales
+    private boolean corriendo = false;
+    private boolean pausa;
 
     public VistaJuego(Context contexto, AttributeSet atributos){
         super(contexto,atributos);
@@ -41,6 +61,15 @@ public class VistaJuego extends View {
             coche.setRotacion((int) (Math.random()*8-4));
             Coches.add(coche);
         }
+        graficoBici = contexto.getResources().getDrawable(R.drawable.bici);
+        bici = new Grafico(this,graficoBici);
+
+        corriendo = true;
+
+        graficoRueda = contexto.getResources().getDrawable(R.drawable.rueda);
+
+        rueda = new Grafico(this,graficoRueda);
+        ruedaActiva = false;
 
 
     }
@@ -48,15 +77,210 @@ public class VistaJuego extends View {
         super.onSizeChanged(w,h,oldw,oldh);
 
         for(Grafico coche:Coches){
-            coche.setPosX(Math.random()*(w-coche.getAncho()));
-            coche.setPosY(Math.random()*(h-coche.getAlto()));
+           do{
+               coche.setPosX(Math.random()*(w-coche.getAncho()));
+               coche.setPosY(Math.random()*(h-coche.getAlto()));
+           }while(coche.distancia(bici) < (w+h)/5);
+
         }
+        bici.setPosX((w-bici.getAncho())/2);
+        bici.setPosY((h-bici.getAlto())/2);
+        hiloJuego = new HiloJuego();
+        hiloJuego.execute();
     }
     protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
         for(Grafico coche:Coches){
             coche.dibujarGrafico(canvas);
         }
+        bici.dibujarGrafico(canvas);
+        if(ruedaActiva){
+            rueda.dibujarGrafico(canvas);
+        }
     }
 
+    protected synchronized void actualizaMovimiento() {
+        long ahora = System.currentTimeMillis();
+        if(ultimoProceso + PERIODO_PROCESO>ahora) {
+            return;
+        }
+        double retardo = (ahora - ultimoProceso)/PERIODO_PROCESO;
+
+        bici.setAngulo((int) (bici.getAngulo()+giroBici*retardo));
+
+        double nIncX = bici.getIncX()+aceleracionBici*Math.cos(Math.toRadians(bici.getAngulo()))*retardo;
+        double nIncY = bici.getIncY()+aceleracionBici*Math.sin(Math.toRadians(bici.getAngulo()))*retardo;
+        if(Grafico.distanciaE(0,0,nIncX,nIncY) <= Grafico.getMaxVelocidad()){
+            bici.setIncX(nIncX);
+            bici.setIncY(nIncY);
+        }
+        bici.incrementaPos();
+        bici.setIncX(0);
+        bici.setIncY(0);
+
+
+        for(Grafico coche : Coches){
+            coche.incrementaPos();
+
+        }
+        ultimoProceso=ahora;
+        if (ruedaActiva){
+            rueda.incrementaPos();
+            distanciaRueda--;
+            if(distanciaRueda<0){
+                ruedaActiva = false;
+            }
+            else{
+                for(int i = 0; i<Coches.size();i++){
+                    if(rueda.verificaColision(Coches.elementAt(i))){
+                        destruyeCoche(i);
+                        i=Coches.size();
+                        ruedaActiva = false;
+                    }
+                }
+            }
+
+        }
+
+
+
+    }
+
+    class HiloJuego extends AsyncTask<Integer,Void,Integer>{
+        @Override
+        protected void onProgressUpdate(Void... values) {
+
+        }
+        @Override
+        protected Integer doInBackground(Integer... integers) {
+            while(true){
+                while(corriendo){
+                    actualizaMovimiento();
+                }
+            }
+        }
+    }
+    /*
+    private class HiloJuego extends Thread{
+        public void run(){
+            while (true){
+                actualizaMovimiento();
+            }
+        }
+    }
+    */
+    //Gestion de pantalla tactil
+    @Override
+    public boolean onKeyDown(int codigoTecla, KeyEvent evento){
+        super.onKeyDown(codigoTecla,evento);
+
+        boolean pulsacion = true;
+        switch (codigoTecla){
+            case KeyEvent.KEYCODE_DPAD_UP:
+                aceleracionBici =+ PASO_ACELERACION_BICI;
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                giroBici =-PASO_GIRO_BICI;
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                giroBici =+PASO_GIRO_BICI;
+                break;
+            case KeyEvent.KEYCODE_DPAD_CENTER:
+                lanzarRueda();
+                break;
+            default:
+                pulsacion = false;
+                break;
+
+        }
+        return pulsacion;
+    }
+
+    @Override
+    public boolean onKeyUp(int codigoTecla, KeyEvent evento) {
+        super.onKeyUp(codigoTecla, evento);
+        boolean pulsacion = true;
+        switch (codigoTecla){
+            case KeyEvent.KEYCODE_DPAD_UP:
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                break;
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                giroBici=0;
+            default:
+                pulsacion = false;
+                break;
+        }
+        return pulsacion;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent evento) {
+        super.onTouchEvent(evento);
+        float x = evento.getX();
+        float y = evento.getY();
+        switch (evento.getAction()){
+            case MotionEvent.ACTION_DOWN:
+                disparo = true;
+                break;
+            case MotionEvent.ACTION_MOVE:
+                float dx = Math.abs(x-mX);
+                float dy = Math.abs(y-mY);
+                if(dy<6 && dx>6){
+                    giroBici = Math.round((x-mX)/2);
+                    disparo=false;
+                }else{
+                    if(dx<6 && dy>6){
+                        aceleracionBici = Math.round((mY-y)/25);
+                        disparo = false;
+                    }
+
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+                giroBici = 0;
+                aceleracionBici = 0;
+                if(disparo){
+                    lanzarRueda();
+                }
+                break;
+
+        }
+        mX = x;
+        mY = y;
+        return true;
+
+    }
+    private void destruyeCoche(int i){
+        Coches.remove(i);
+        ruedaActiva = false;
+
+        MediaPlayer miMediaPlayer = MediaPlayer.create(getContext(),R.raw.explosion);
+        miMediaPlayer.start();
+
+
+    }
+    private void lanzarRueda(){
+        rueda.setPosX(bici.getPosX()+bici.getAncho()/2-rueda.getAncho()/2);
+        rueda.setPosY(bici.getPosY()+bici.getAlto()/2-rueda.getAlto());
+        rueda.setAngulo(bici.getAngulo());
+        rueda.setIncX(Math.cos(Math.toRadians(rueda.getAngulo()))*VELOCIDAD_RUEDA);
+        rueda.setIncY(Math.sin(Math.toRadians(rueda.getAngulo()))*VELOCIDAD_RUEDA);
+        distanciaRueda = (int)Math.min(this.getWidth()/Math.abs(rueda.getIncX()),this.getHeight()/Math.abs(rueda.getIncY()))-2;
+        ruedaActiva = true;
+    }
+
+    public HiloJuego getHilo() {
+        return hiloJuego;
+    }
+    public void setCorriendo(boolean corriendo){
+        this.corriendo = corriendo;
+    }
+    public void setPausa(boolean pausa){
+        this.pausa = pausa;
+    }
 }
+
+
+
+
