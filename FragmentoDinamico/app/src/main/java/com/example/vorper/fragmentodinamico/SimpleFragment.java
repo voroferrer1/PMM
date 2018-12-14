@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -39,13 +40,15 @@ public class SimpleFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = null;
+        View tv;
         if(mNum % 2 == 0){
             v= inflater.inflate(R.layout.fragment_simple,null);
-            View tv = v.findViewById(R.id.text);
+            tv = v.findViewById(R.id.text);
         }else{
-            v = inflater.inflate(R.layout.fragment_simple2,container,false);
-            View tv = v.findViewById(R.id.text2);
+            v = inflater.inflate(R.layout.fragment_simple2,null);
+            tv = v.findViewById(R.id.text2);
         }
+        ((TextView)tv).setText("Fragmento numero #"+mNum);
         return v;
     }
 
