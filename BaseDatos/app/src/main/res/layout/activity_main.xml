@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:orientation="vertical">
+
+    <EditText
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Código del producto"
+        android:id="@+id/txt_codigo"
+        />
+    <EditText
+        android:id="@+id/txt_descripcion"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Código del producto"
+        />
+    <EditText
+        android:id="@+id/txt_precio"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:hint="Código del producto"
+        />
+
+    <Button
+        android:onClick="Registrar"
+        android:id="@+id/boton"
+        android:layout_marginTop="50dp"
+        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:text="REGISTRAR PRODUCTO"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:text="BUSCAR PRODUCTO"/>
+
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:text="MODIFICAR PRODUCTO"/>
+    <Button
+        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:text="ELIMINAR PRODUCTO"/>
+
+</LinearLayout>
