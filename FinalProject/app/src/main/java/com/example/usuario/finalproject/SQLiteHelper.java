@@ -12,14 +12,28 @@ public class SQLiteHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db){
         db.execSQL(BaseDatos.CREATE_TABLE_COCHES);
+
         db.execSQL(BaseDatos.LLENAR_TABLA_COCHES);
+
+        db.execSQL(BaseDatos.CREATE_TABLE_PEDIDO);
+
+        db.execSQL(BaseDatos.CREATE_TABLE_USUARIO);
+
+        db.execSQL(BaseDatos.LLENAR_TABLA_USUARIO);
     }
     @Override
     public void onUpgrade(SQLiteDatabase db,int versionAnterior,int versionNueva){
-        db.execSQL("DROP TABLE IF EXISTS coches");
+        db.execSQL(BaseDatos.DROP_TABLA_COCHES);
+        db.execSQL(BaseDatos.DROP_TABLA_PEDIDO);
+        db.execSQL(BaseDatos.DROP_TABLA_USUARIO);
 
         db.execSQL(BaseDatos.CREATE_TABLE_COCHES);
         db.execSQL(BaseDatos.LLENAR_TABLA_COCHES);
+        db.execSQL(BaseDatos.CREATE_TABLE_PEDIDO);
+        db.execSQL(BaseDatos.CREATE_TABLE_USUARIO);
+        db.execSQL(BaseDatos.LLENAR_TABLA_USUARIO);
+
+
 
     }
 }
