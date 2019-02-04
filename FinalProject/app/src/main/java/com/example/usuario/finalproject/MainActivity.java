@@ -21,9 +21,5 @@ public class MainActivity extends AppCompatActivity {
 
         bd.close();
     }
-    @Override
-    protected void onStop() {
-        super.onStop();
-        bd.execSQL(BaseDatos.DROP_TABLA_COCHES);
-    }
+
 }
