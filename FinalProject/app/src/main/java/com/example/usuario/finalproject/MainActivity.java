@@ -5,21 +5,27 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity {
     SQLiteHelper cliBD;
-
     SQLiteDatabase bd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        cliBD = new SQLiteHelper(this,BaseDatos.BASE_DATOS_NOMBRE,null,BaseDatos.DASE_DATOS_VERSION);
+        cliBD = new SQLiteHelper(this);
 
-        bd = cliBD.getWritableDatabase();
+        cliBD.open();
 
 
-        bd.close();
+        cliBD.close();
+    }
+    public void login(View view){
+
+    }
+    public void register(View view){
+
     }
 
 }
