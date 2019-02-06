@@ -24,33 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
     public void login(View view){
-        String nombreUsuarioLogin = usuario.getText().toString();
-        String contraseñaUsuarioLogin = contraseña.getText().toString();
-        Cursor cursorLogin;
-        if(nombreUsuarioLogin.equals("") && contraseñaUsuarioLogin.equals("")){
-            Toast.makeText(MainActivity.this,"Introduce Usuario y Contraseña",Toast.LENGTH_LONG).show();
-        }else {
-            if (nombreUsuarioLogin.equals("")) {
-                Toast.makeText(MainActivity.this, "Introduce Usuario", Toast.LENGTH_LONG).show();
-            }
-            if (contraseñaUsuarioLogin.equals("")) {
-                Toast.makeText(MainActivity.this, "Introduce Contraseña", Toast.LENGTH_LONG).show();
-            } else {
-                String[] datosUsuario = {nombreUsuarioLogin,contraseñaUsuarioLogin};
-                String[] columnas = {
-                        BaseDatos.TABLA_USUARIO_ID,
-                        BaseDatos.TABLA_USUARIO_USER};
-                cliBD.open();
-                cursorLogin= cliBD.getDatos(BaseDatos.TABLA_USUARIO_NOMBRE,columnas,"user = ? AND password = ?",datosUsuario,BaseDatos.TABLA_USUARIO_ID);
-                if (cursorLogin.moveToFirst()) {
-                    String loginUsuario = cursorLogin.getString(0);
-                    String loginContraseña = cursorLogin.getString(1);
-                    setContentView(R.layout.login);
-                }else{
-                    Toast.makeText(MainActivity.this,"Usuario y Contraseña incorrectos",Toast.LENGTH_LONG).show();
-                }
-            }
-        }
+        //setContentView(R.layout.login);
     }
     public void register(View view){
         String nombreUsuario = usuario.getText().toString();
@@ -88,6 +62,9 @@ public class MainActivity extends AppCompatActivity {
                 cliBD.close();
             }
         }
+
+
+        //
     }
 
 }
