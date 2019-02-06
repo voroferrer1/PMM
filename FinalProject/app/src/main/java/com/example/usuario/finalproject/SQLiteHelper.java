@@ -1,6 +1,8 @@
 package com.example.usuario.finalproject;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -52,5 +54,16 @@ public class SQLiteHelper{
     }
     public void close(){
         baseDatosHelper.close();
+    }
+    public Cursor getDatos(String tabla,String[] columns,String selection,String[] selArgs,String orderBy){
+        return baseDatosb.query(tabla,columns,selection,selArgs,null,null,orderBy);
+    }
+    public long insertarUsuario(String tabla,String[][] datos){
+
+        ContentValues contentValues = new ContentValues();
+        for(String[] campo:datos){
+            contentValues.put(campo[0],campo[1]);
+        }
+        return baseDatosb.insert(tabla,null,contentValues);
     }
 }
