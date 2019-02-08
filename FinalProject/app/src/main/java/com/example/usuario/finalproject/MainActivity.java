@@ -38,14 +38,20 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 String[] datosUsuario = {nombreUsuarioLogin,contraseñaUsuarioLogin};
                 String[] columnas = {
-                        BaseDatos.TABLA_USUARIO_ID,
-                        BaseDatos.TABLA_USUARIO_USER};
+                        BaseDatos.TABLA_USUARIO_USER,
+                        BaseDatos.TABLA_USUARIO_PASS};
                 cliBD.open();
                 cursorLogin= cliBD.getDatos(BaseDatos.TABLA_USUARIO_NOMBRE,columnas,"user = ? AND password = ?",datosUsuario,BaseDatos.TABLA_USUARIO_ID);
                 if (cursorLogin.moveToFirst()) {
                     String loginUsuario = cursorLogin.getString(0);
                     String loginContraseña = cursorLogin.getString(1);
-                    setContentView(R.layout.login);
+
+                    Intent intent = new Intent(MainActivity.this,Pantalla1.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("usuario",loginUsuario);
+                    bundle.putString("contraseña",loginContraseña);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }else{
                     Toast.makeText(MainActivity.this,"Usuario y Contraseña incorrectos",Toast.LENGTH_LONG).show();
                 }
@@ -56,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         String nombreUsuario = usuario.getText().toString();
         String contraseñaUsuario = contraseña.getText().toString();
         Cursor cursor;
+
         if(nombreUsuario.equals("") && contraseñaUsuario.equals("")){
             Toast.makeText(MainActivity.this,"Introduce Usuario y Contraseña",Toast.LENGTH_LONG).show();
         }else{
