@@ -48,10 +48,12 @@ public class Modelos implements Serializable {
         return this.precio;
     }
     public void setPrecioTotal(float precioTotal){
-        this.precio = precioTotal;
+        this.precioTotal = precioTotal;
     }
-    public float getPrecioTotal(){
-        return this.precioTotal;
+    public String getPrecioTotal(){
+        String precioFinal = Float.toString(precioTotal);
+
+        return precioFinal;
     }
     public void setAire(boolean aire){
         this.aire=aire;

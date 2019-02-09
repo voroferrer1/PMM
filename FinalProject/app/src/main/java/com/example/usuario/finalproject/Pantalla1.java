@@ -65,7 +65,8 @@ public class Pantalla1 extends AppCompatActivity {
         factura.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                boolean flag = false;
+                boolean flagSeguro = false;
+                boolean flagHoras = false;
                 float precioFinal = 0;
                 if (checkBoxAire.isChecked()) {
                     modelos[indice].setAire(true);
@@ -82,35 +83,35 @@ public class Pantalla1 extends AppCompatActivity {
                 String comparador = horas.getText().toString();
                 if (comparador.equalsIgnoreCase("")) {
                     Toast.makeText(getApplicationContext(), "Debes indicar las horas", Toast.LENGTH_SHORT).show();
-                    flag = false;
                 } else {
                     modelos[indice].setHoras(Float.parseFloat(horas.getText().toString()));
+                    flagHoras = true;
                 }
                 float precioHoras = modelos[indice].getPrecio() * modelos[indice].getHoras();
                 precioFinal += precioHoras;
                 if (botonSinSeguro.isChecked()) {
                     modelos[indice].setEnviado("Sin Seguro");
-                    flag = true;
+                    flagSeguro = true;
                 } else if (botonTodoRiesgo.isChecked()) {
                     modelos[indice].setEnviado("Seguro todo riesgo");
                     precioFinal *= 1.2;
-                    flag = true;
+                    flagSeguro = true;
                 } else {
                     Toast.makeText(getApplicationContext(), "Debes seleccionar un tipo de seguro", Toast.LENGTH_SHORT).show();
-                    flag = false;
+
                 }
 
-                if (flag == true) {
+                if (flagSeguro == true && flagHoras==true) {
+                    Toast.makeText(getApplicationContext(), Float.toString(precioFinal), Toast.LENGTH_SHORT).show();
                     modelos[indice].setPrecioTotal(precioFinal);
+
                     Intent intent = new Intent(Pantalla1.this, ResumenPedido.class);
                     bundle.putSerializable("Objeto", modelos[indice]);
                     intent.putExtras(bundle);
                     startActivity(intent);
 
                 }
-                Intent intent = new Intent(Pantalla1.this, ResumenPedido.class);
-                intent.putExtras(bundle);
-                startActivity(intent);
+
             }
 
         });
