@@ -4,14 +4,13 @@ package com.example.usuario.finalproject;
 public class BaseDatos {
 
     public static final String BASE_DATOS_NOMBRE = "ProyectoFinalCoches.db";
-    public static final int BASE_DATOS_VERSION = 8;
+    public static final int BASE_DATOS_VERSION = 10;
     //Tabla Coches
     public static final String TABLA_COCHES_NOMBRE = "Coches";
     public static final String TABLA_COCHES_ID = "coches_id";
     public static final String TABLA_COCHES_MARCA = "marca";
     public static final String TABLA_COCHES_MODELO = "modelo";
     public static final String TABLA_COCHES_PRECIO = "precio";
-    //TODO public static final String TABLA_COCHES_IMAGEN = "imagen";
     //Tabla Pedido
     public static final String TABLA_PEDIDO_NOMBRE = "Pedido";
     public static final String TABLA_PEDIDO_ID = "pedido_id";
@@ -24,6 +23,7 @@ public class BaseDatos {
     //Tabla Usuario
     public static final String TABLA_USUARIO_NOMBRE = "Usuario";
     public static final String TABLA_USUARIO_ID = "usuario_id";
+    public static final String TABLA_USUARIO_PEDIDO_ID = "pedido_id";
     public static final String TABLA_USUARIO_USER = "user";
     public static final String TABLA_USUARIO_PASS = "password";
 
@@ -34,13 +34,13 @@ public class BaseDatos {
                     "%s TEXT NOT NULL ," +
                     "%s TEXT NOT NULL ," +
                     "%s CHAR NOT NULL)",
-                    //TODO"%s TEXT NOT NULL)",
+
                     TABLA_COCHES_NOMBRE,
                     TABLA_COCHES_ID,
                     TABLA_COCHES_MARCA,
                     TABLA_COCHES_MODELO,
                     TABLA_COCHES_PRECIO
-            //TODO TABLA_COCHES_IMAGEN
+
     );
 
     public static final String CREATE_TABLE_PEDIDO = String.format(
@@ -67,11 +67,13 @@ public class BaseDatos {
     );
     public static final String CREATE_TABLE_USUARIO = String.format(
             "CREATE TABLE IF NOT EXISTS %s("+
-            "%s INTEGER PRIMARY KEY AUTOINCREMENT,"+
+            "%s INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "%s CHAR"+
                     "%s CHAR NOT NULL,"+
                     "%s CHAR NOT NULL)",
             TABLA_USUARIO_NOMBRE,
             TABLA_USUARIO_ID,
+            TABLA_USUARIO_PEDIDO_ID,
             TABLA_USUARIO_USER,
             TABLA_USUARIO_PASS
     );

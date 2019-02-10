@@ -39,13 +39,15 @@ public class MainActivity extends AppCompatActivity {
                 String[] datosUsuario = {nombreUsuarioLogin,contraseñaUsuarioLogin};
                 String[] columnas = {
                         BaseDatos.TABLA_USUARIO_USER,
-                        BaseDatos.TABLA_USUARIO_PASS};
+                        BaseDatos.TABLA_USUARIO_PASS,
+                        BaseDatos.TABLA_USUARIO_PEDIDO_ID};
                 cliBD.open();
                 cursorLogin= cliBD.getDatos(BaseDatos.TABLA_USUARIO_NOMBRE,columnas,"user = ? AND password = ?",datosUsuario,BaseDatos.TABLA_USUARIO_ID);
                 if (cursorLogin.moveToFirst()) {
                     String loginUsuario = cursorLogin.getString(0);
                     String loginContraseña = cursorLogin.getString(1);
-
+                    usuario.setText("");
+                    contraseña.setText("");
                     Intent intent = new Intent(MainActivity.this,Pantalla1.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("usuario",loginUsuario);
@@ -87,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     String[][] insercion = {{"user",nombreUsuario},{"password",contraseñaUsuario}};
                     cliBD.insertarUsuario(BaseDatos.TABLA_USUARIO_NOMBRE,insercion);
-                    Toast.makeText(MainActivity.this,"Usuario creado.",Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this,"Usuario "+nombreUsuario +" creado.",Toast.LENGTH_LONG).show();
                 }
                 if (!cursor.isClosed()){
                     cursor.close();

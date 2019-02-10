@@ -66,4 +66,5 @@ public class SQLiteHelper{
         }
         return baseDatosb.insert(tabla,null,contentValues);
     }
+
 }

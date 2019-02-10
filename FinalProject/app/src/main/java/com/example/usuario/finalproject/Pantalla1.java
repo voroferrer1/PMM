@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -56,9 +59,7 @@ public class Pantalla1 extends AppCompatActivity {
         final CheckBox checkBoxGPS = (CheckBox) findViewById(R.id.gps);
         final CheckBox checkBoxRadio = (CheckBox) findViewById(R.id.radio);
         Button factura = (Button) findViewById(R.id.factura);
-        final Button precio = (Button) findViewById(R.id.precio);
-        final RadioGroup seguros = (RadioGroup) findViewById(R.id.radioGroup);
-        final TextView resultado = (TextView) findViewById(R.id.resultado);
+
         final EditText horas = (EditText) findViewById(R.id.horas);
         final Object Texto = spinner.getSelectedItem();
 
@@ -117,6 +118,33 @@ public class Pantalla1 extends AppCompatActivity {
         });
 
         }
+    public boolean onCreateOptionsMenu(Menu menu){
+        MenuInflater inflate = getMenuInflater();
+        inflate.inflate(R.menu.menu, menu);
+        return true;
+    }
+    public boolean onOptionsItemSelected(MenuItem item){
+        String mensaje="";
+        TextView etiqueta = (TextView)findViewById(R.id.Acerca);
+        switch (item.getItemId()){
+            case R.id.MnuOpc1:
+                Intent intent = new Intent(Pantalla1.this,Perfil.class);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                return true;
+            case R.id.MnuOpc2:
+                mensaje="Voro Ferrer Peris";
+                etiqueta.setText(mensaje);
+                Toast.makeText(getApplicationContext(),mensaje,Toast.LENGTH_LONG);
+                return true;
+            case R.id.MnuOpc3:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
+    }
 
 
     class AdaptadorSpinner extends ArrayAdapter {

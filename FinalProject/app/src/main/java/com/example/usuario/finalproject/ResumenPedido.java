@@ -9,30 +9,64 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ResumenPedido extends AppCompatActivity {
     Bundle bundle;
+    SQLiteHelper cliBD;
+    Modelos modelos2;
+    TextView modelo;
+    TextView marca;
+    TextView horas;
+    TextView precio;
+    TextView gps;
+    TextView radio;
+    TextView aire;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.resumen_pedido);
+        cliBD = new SQLiteHelper(this);
         bundle = getIntent().getExtras();
         final Intent intent = getIntent();
-        final TextView modelo = (TextView) findViewById(R.id.modelo2);
-        final TextView marca = (TextView) findViewById(R.id.marca2);
-        final TextView horas = (TextView) findViewById(R.id.horas2);
-        final TextView precio = (TextView) findViewById(R.id.precio2);
+        modelo = (TextView) findViewById(R.id.modelo2);
+        marca = (TextView) findViewById(R.id.marca2);
+        horas = (TextView) findViewById(R.id.horas2);
+        precio = (TextView) findViewById(R.id.precio2);
+        gps = (TextView) findViewById(R.id.GPS);
+        radio = (TextView) findViewById(R.id.radio2);
+        aire = (TextView) findViewById(R.id.aire2);
         final ImageView imagen = (ImageView) findViewById(R.id.imagen2);
-        Modelos modelos2 = (Modelos) intent.getSerializableExtra("Objeto");
+        modelos2 = (Modelos) intent.getSerializableExtra("Objeto");
         modelo.setText(modelos2.getModelo());
         marca.setText(modelos2.getMarca());
         horas.setText(String.valueOf(modelos2.getHoras()));
-        precio.setText(modelos2.getPrecioTotal());
+        precio.setText(modelos2.getPrecioTotal()+"€");
         imagen.setBackground((getDrawable(modelos2.getView())));
-
+        if(modelos2.getGPS()){
+            gps.setText("Si");
+        }
+        if(modelos2.getRadioDVD()){
+            radio.setText("Si");
+        }
+        if (modelos2.getAire()){
+            aire.setText("Si");
+        }
     }
 
     public void volver(View view){
+        finish();
+    }
+    public void confirmar(View view){
+        cliBD.open();
+        String[][] insercion = {{BaseDatos.TABLA_PEDIDO_COCHE_ID,modelos2.getModelo()},
+                {BaseDatos.TABLA_PEDIDO_PRECIO_TOTAL,modelos2.getPrecioTotal()},
+                {BaseDatos.TABLA_PEDIDO_HORAS,Float.toString(modelos2.getHoras())},
+                {BaseDatos.TABLA_PEDIDO_RADIO,Boolean.toString(modelos2.getRadioDVD())},
+                {BaseDatos.TABLA_PEDIDO_GPS,Boolean.toString(modelos2.getGPS())},
+                {BaseDatos.TABLA_PEDIDO_AIRE,Boolean.toString(modelos2.getAire())}};
+        cliBD.insertarUsuario(BaseDatos.TABLA_PEDIDO_NOMBRE,insercion);
+        Toast.makeText(ResumenPedido.this,"Pedido Realizado",Toast.LENGTH_LONG).show();
         finish();
     }
 }
