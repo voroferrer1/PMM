@@ -4,7 +4,7 @@ package com.example.usuario.finalproject;
 public class BaseDatos {
 
     public static final String BASE_DATOS_NOMBRE = "ProyectoFinalCoches.db";
-    public static final int BASE_DATOS_VERSION = 10;
+    public static final int BASE_DATOS_VERSION = 13;
     //Tabla Coches
     public static final String TABLA_COCHES_NOMBRE = "Coches";
     public static final String TABLA_COCHES_ID = "coches_id";
@@ -14,6 +14,7 @@ public class BaseDatos {
     //Tabla Pedido
     public static final String TABLA_PEDIDO_NOMBRE = "Pedido";
     public static final String TABLA_PEDIDO_ID = "pedido_id";
+    public static final String TABLA_PEDIDO_USUARIO_ID = "usuario_id";
     public static final String TABLA_PEDIDO_COCHE_ID= "coche_id";
     public static final String TABLA_PEDIDO_PRECIO_TOTAL = "precio_total";
     public static final String TABLA_PEDIDO_HORAS = "horas";
@@ -23,7 +24,6 @@ public class BaseDatos {
     //Tabla Usuario
     public static final String TABLA_USUARIO_NOMBRE = "Usuario";
     public static final String TABLA_USUARIO_ID = "usuario_id";
-    public static final String TABLA_USUARIO_PEDIDO_ID = "pedido_id";
     public static final String TABLA_USUARIO_USER = "user";
     public static final String TABLA_USUARIO_PASS = "password";
 
@@ -46,7 +46,8 @@ public class BaseDatos {
     public static final String CREATE_TABLE_PEDIDO = String.format(
             "CREATE TABLE IF NOT EXISTS %s("+         //Nombre tabla
             "%s INTEGER PRIMARY KEY AUTOINCREMENT,"+  //ID Pedido
-            "%s INTEGER NOT NULL,"+                   //ID Coche
+                    "%s INTEGER NOT NULL,"+
+                    "%s INTEGER NOT NULL,"+                   //ID Coche
             "%s CHAR NOT NULL,"+                      //Precio total
             "%s CHAR NOT NULL,"+                      //Horas
             "%s BOOLEAN ,"+                           //Radio
@@ -55,6 +56,7 @@ public class BaseDatos {
             "FOREIGN KEY (%s) REFERENCES %s(%s))",     //ID Coche, Tabla coches, ID coches
             TABLA_PEDIDO_NOMBRE,
             TABLA_PEDIDO_ID,
+            TABLA_PEDIDO_USUARIO_ID,
             TABLA_PEDIDO_COCHE_ID,
             TABLA_PEDIDO_PRECIO_TOTAL,
             TABLA_PEDIDO_HORAS,
@@ -68,12 +70,10 @@ public class BaseDatos {
     public static final String CREATE_TABLE_USUARIO = String.format(
             "CREATE TABLE IF NOT EXISTS %s("+
             "%s INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "%s CHAR"+
                     "%s CHAR NOT NULL,"+
                     "%s CHAR NOT NULL)",
             TABLA_USUARIO_NOMBRE,
             TABLA_USUARIO_ID,
-            TABLA_USUARIO_PEDIDO_ID,
             TABLA_USUARIO_USER,
             TABLA_USUARIO_PASS
     );

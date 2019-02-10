@@ -40,18 +40,20 @@ public class MainActivity extends AppCompatActivity {
                 String[] columnas = {
                         BaseDatos.TABLA_USUARIO_USER,
                         BaseDatos.TABLA_USUARIO_PASS,
-                        BaseDatos.TABLA_USUARIO_PEDIDO_ID};
+                        BaseDatos.TABLA_USUARIO_ID};
                 cliBD.open();
                 cursorLogin= cliBD.getDatos(BaseDatos.TABLA_USUARIO_NOMBRE,columnas,"user = ? AND password = ?",datosUsuario,BaseDatos.TABLA_USUARIO_ID);
                 if (cursorLogin.moveToFirst()) {
                     String loginUsuario = cursorLogin.getString(0);
                     String loginContraseña = cursorLogin.getString(1);
+                    int usuario_id = cursorLogin.getInt(2);
                     usuario.setText("");
                     contraseña.setText("");
                     Intent intent = new Intent(MainActivity.this,Pantalla1.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("usuario",loginUsuario);
                     bundle.putString("contraseña",loginContraseña);
+                    bundle.putString("id",Integer.toString(usuario_id));
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
